@@ -40,4 +40,4 @@ COPY ./template.ipynb /home/noperm/notebooks/ModelCreation.ipynb
 
 EXPOSE 8888
 
-CMD ["sh", "-c", "jupyter notebook --notebook-dir=/home/noperm/notebooks --ip=0.0.0.0 --port=8888 --no-browser ----NotebookApp.base_url=/${NOTEBOOK_ID} --NotebookApp.token=${JUPYTER_TOKEN} --NotebookApp.file_to_run=/home/noperm/notebooks/ModelCreation.ipynb"]
+CMD ["sh", "-c", "jupyter notebook --notebook-dir=/home/noperm/notebooks --ip=0.0.0.0 --port=8888 --no-browser --NotebookApp.tornado_settings="{\"headers\":{\"Content-Security-Policy\":\"frame-ancestors 'self' https://equipped-woodcock-needlessly.ngrok-free.app\"}}" --NotebookApp.base_url=/${NOTEBOOK_ID} --NotebookApp.token=${JUPYTER_TOKEN} --NotebookApp.file_to_run=/home/noperm/notebooks/ModelCreation.ipynb"]
