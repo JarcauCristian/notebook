@@ -20,8 +20,6 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN chmod 555 /lib /lib64
-
 RUN chmod 500 /boot /etc /media /mnt /opt /proc /run /sbin /srv /var
 
 RUN pip install notebook
@@ -37,7 +35,8 @@ ENV SERVICE_PORT=49153
 ENV DATASET_URL=null
 
 COPY ./template.ipynb /home/noperm/notebooks/ModelCreation.ipynb
+COPY ./jupyter_notebook_config.py /home/noperm/csp_config.py
 
 EXPOSE 8888
 
-CMD ["sh", "-c", "jupyter notebook --notebook-dir=/home/noperm/notebooks --ip=0.0.0.0 --port=8888 --no-browser --NotebookApp.tornado_settings="{\"headers\":{\"Content-Security-Policy\":\"frame-ancestors 'self' https://equipped-woodcock-needlessly.ngrok-free.app\"}}" --NotebookApp.base_url=/${NOTEBOOK_ID} --NotebookApp.token=${JUPYTER_TOKEN} --NotebookApp.file_to_run=/home/noperm/notebooks/ModelCreation.ipynb"]
+CMD jupyter notebook --NotebookApp.base_url=/${NOTEBOOK_ID} --NotebookApp.token='' --NotebookApp.password='' --ip=0.0.0.0 --port=8888 --no-browser --config=/home/noperm/csp_config.py /home/noperm/notebooks/ModelCreation.ipynb
