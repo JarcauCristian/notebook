@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, String, DateTime
+from sqlalchemy import create_engine, Column, String, DateTime, Integer
 from sqlalchemy.orm import sessionmaker, declarative_base
 import os
 import requests
@@ -20,6 +20,7 @@ class MyTable(Base):
     last_accessed = Column(DateTime)
     notebook_id = Column(String, primary_key=True)
     description = Column(String)
+    port = Column(Integer)
 
 
 # Connect to the database
