@@ -39,4 +39,4 @@ COPY ./jupyter_notebook_config.py /home/noperm/csp_config.py
 
 EXPOSE 8888
 
-CMD jupyter notebook --NotebookApp.base_url=/${NOTEBOOK_ID} --NotebookApp.token='' --NotebookApp.password='' --ip=0.0.0.0 --port=8888 --no-browser --config=/home/noperm/csp_config.py /home/noperm/notebooks/ModelCreation.ipynb
+CMD jupyter notebook --NotebookApp.allow_origin='https://ai1.sedimark.work' --NotebookApp.base_url=/${NOTEBOOK_ID} --NotebookApp.token='' --NotebookApp.password='' --ip=0.0.0.0 --port=8888 --no-browser --config=/home/noperm/csp_config.py /home/noperm/notebooks/ModelCreation.ipynb

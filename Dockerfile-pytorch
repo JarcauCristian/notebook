@@ -10,10 +10,10 @@ RUN mkdir /home/noperm/notebooks && \
 
 COPY requirements.txt /home/noperm/
 COPY save_to_postgres.py /home/noperm/
-COPY upload_to_mlflow.py /home/noperm/
+COPY upload_pytorch_to_mlflow.py /home/noperm/
 
 RUN chmod 111 /home/noperm/save_to_postgres.py
-RUN chmod 111 /home/noperm/upload_to_mlflow.py
+RUN chmod 111 /home/noperm/upload_pytorch_to_mlflow.py
 
 RUN apt-get update && \
     apt-get install -y gcc && \
@@ -40,4 +40,4 @@ COPY ./jupyter_notebook_config.py /home/noperm/csp_config.py
 
 EXPOSE 8888
 
-CMD jupyter notebook --NotebookApp.base_url=/${NOTEBOOK_ID} --NotebookApp.token='' --NotebookApp.password='' --ip=0.0.0.0 --port=8888 --no-browser --config=/home/noperm/csp_config.py /home/noperm/notebooks/ModelCreation.ipynb
+CMD jupyter notebook --NotebookApp.allow_origin='https://ai1.sedimark.work' --NotebookApp.base_url=/${NOTEBOOK_ID} --NotebookApp.token='' --NotebookApp.password='' --ip=0.0.0.0 --port=8888 --no-browser --config=/home/noperm/csp_config.py /home/noperm/notebooks/ModelCreation.ipynb
