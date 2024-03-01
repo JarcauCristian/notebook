@@ -20,7 +20,10 @@ class MyTable(Base):
     last_accessed = Column(DateTime)
     notebook_id = Column(String, primary_key=True)
     description = Column(String)
+    dataset_user = Column(String)
+    dataset_name = Column(String)
     port = Column(Integer)
+    notebook_type = Column(String)
 
 
 # Connect to the database

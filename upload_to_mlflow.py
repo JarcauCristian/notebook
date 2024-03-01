@@ -8,10 +8,10 @@ import pandas as pd
 from sqlalchemy import create_engine, Column, String, DateTime, Numeric, Integer
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-POSTGRES_HOST = "62.72.21.79"
-POSTGRES_PORT = 5433
+POSTGRES_HOST = "192.168.1.2"
+POSTGRES_PORT = 32102
 POSTGRES_USER = "postgres"
-POSTGRES_PASSWORD = "KzKmJQA#io4pTCN"
+POSTGRES_PASSWORD = "super_dooper_secret"
 POSTGRES_DB = "postgres"
 
 parser = argparse.ArgumentParser(description="Saving data!")
@@ -70,10 +70,12 @@ if metrics is not None and params is not None and model is not None:
         model_id = Column(String, primary_key=True)
         created_at = Column(DateTime)
         user_id = Column(String)
+        dataset_user = Column(String)
         description = Column(String)
         score = Column(Numeric)
         model_name = Column(String)
         score_count = Column(Integer)
+        notebook_type = Column(String)
 
 
     df = pd.read_csv("./temp_file.csv")
@@ -111,7 +113,7 @@ if metrics is not None and params is not None and model is not None:
     session = Session()
 
     new_row = MyTable(model_id=run_id, created_at=datetime.datetime.now(), user_id=os.getenv("USER_ID"),
-                      description=json.dumps(csv_data), score=0.0, model_name=model_name, score_count=0)
+                      description=json.dumps(csv_data), score=0.0, model_name=model_name, score_count=0, dataset_user=os.getenv("DATASET_USER"), notebook_type="sklearn")
 
     session.add(new_row)
 

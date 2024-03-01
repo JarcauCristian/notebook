@@ -8,6 +8,9 @@ RUN mkdir /home/noperm/notebooks && \
     chown noperm:nopermission /home/noperm/notebooks && \
     chmod 700 /home/noperm/notebooks
 
+COPY ./template.ipynb /home/noperm/notebooks/ModelCreation.ipynb
+RUN chmod 777 /home/noperm/notebooks/ModelCreation.ipynb
+
 COPY requirements.txt /home/noperm/
 COPY save_to_postgres.py /home/noperm/
 COPY upload_to_mlflow.py /home/noperm/
@@ -34,9 +37,8 @@ ENV SERVICE_NAME=api-deleter-service
 ENV SERVICE_PORT=49153
 ENV DATASET_URL=null
 
-COPY ./template.ipynb /home/noperm/notebooks/ModelCreation.ipynb
 COPY ./jupyter_notebook_config.py /home/noperm/csp_config.py
 
 EXPOSE 8888
 
-CMD jupyter notebook --NotebookApp.allow_origin='https://ai1.sedimark.work' --NotebookApp.base_url=/${NOTEBOOK_ID} --NotebookApp.token='' --NotebookApp.password='' --ip=0.0.0.0 --port=8888 --no-browser --config=/home/noperm/csp_config.py /home/noperm/notebooks/ModelCreation.ipynb
+CMD jupyter notebook --NotebookApp.base_url=/${NOTEBOOK_ID} --NotebookApp.token='' --NotebookApp.password='' --ip=0.0.0.0 --port=8888 --no-browser --config=/home/noperm/csp_config.py /home/noperm/notebooks/ModelCreation.ipynb

@@ -618,7 +618,7 @@ c = get_config()  #noqa
 #
 #          Takes precedence over allow_origin_pat.
 #  Default: ''
-c.ServerApp.allow_origin = 'https://ai1.sedimark.work'
+# c.ServerApp.allow_origin = 'https://ai1.sedimark.work'
 
 ## Use a regular expression for the Access-Control-Allow-Origin header
 #

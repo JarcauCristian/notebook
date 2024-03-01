@@ -1,12 +1,13 @@
-import datetime
 import os
-import mlflow
-import torch
 import json
+import mlflow
+import datetime
 import argparse
+import importlib
 import pandas as pd
-from sqlalchemy import create_engine, Column, String, DateTime, Numeric, Integer
+from pathlib import Path
 from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy import create_engine, Column, String, DateTime, Numeric, Integer
 
 POSTGRES_HOST = "192.168.1.2"
 POSTGRES_PORT = 32102
@@ -16,10 +17,12 @@ POSTGRES_DB = "postgres"
 
 parser = argparse.ArgumentParser(description="Saving data!")
 
-parser.add_argument('-n', '--name', type=str, help='Name of the model')
+parser.add_argument('-n', '--name', type=str, help='Name of the model.')
+parser.add_argument('-a', '--architecture', type=str, help='The architecture of the model.')
 
 args = parser.parse_args()
 model_name = args.name
+architecture = args.architecture
 
 MLFLOW_TRACKING_URI = "http://62.72.21.79:5000"
 
@@ -33,10 +36,24 @@ os.environ['MLFLOW_HTTP_REQUEST_TIMEOUT'] = "1000"
 
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 
-model, metrics, params = None, None, None
+model, tokenizer, metrics, params = None, None, None, None
 
 try:
-    model = torch.load("./basic_model.pkl")
+    module = importlib.import_module("transformers")
+    function = getattr(module, str(architecture))
+    checkpoint_list = []
+    for path in Path("./finetuned_model").glob("*"):
+        if "checkpoint" in str(path):
+            checkpoint_list.append(str(path).split("/")[-1].split("-")[-1])
+
+    last_checkpoint = max(checkpoint_list)
+    model = function.from_pretrained(f"./finetuned_model/checkpoint-{last_checkpoint}")
+    if "Image" in str(architecture):
+        tokenizer_function = getattr(module, "AutoImageProcessor")
+        tokenizer = function.from_pretrained(f"./finetuned_model/checkpoint-{last_checkpoint}")
+    else:
+        tokenizer_function = getattr(module, "AutoTokenizer")
+        tokenizer = function.from_pretrained(f"./finetuned_model/checkpoint-{last_checkpoint}")
 except (Exception, FileNotFoundError) as exception:
     print(exception)
 
@@ -52,9 +69,16 @@ try:
 except (Exception, FileNotFoundError) as exception:
     print(exception)
 
-if metrics is not None and params is not None and model is not None:
+if metrics is not None and params is not None and model is not None and tokenizer is not None:
+    components = {
+        "model": model,
+        "tokenizer": tokenizer,
+    }
     with mlflow.start_run(experiment_id=mlflow.get_experiment_by_name("default").experiment_id) as run:
-        mlflow.pytorch.log_model(model, "model")
+        mlflow.transformers.log_model(
+            transformers_model=components,
+            artifact_path="model",
+        )
         mlflow.log_metrics(metrics)
         mlflow.log_params(params)
         mlflow.log_artifact('temp_file.csv')
@@ -113,7 +137,7 @@ if metrics is not None and params is not None and model is not None:
     session = Session()
 
     new_row = MyTable(model_id=run_id, created_at=datetime.datetime.now(), user_id=os.getenv("USER_ID"),
-                      description=json.dumps(csv_data), score=0.0, model_name=model_name, score_count=0, dataset_user=os.getenv("DATASET_USER"), notebook_type="pytorch")
+                      description=json.dumps(csv_data), score=0.0, model_name=model_name, score_count=0, dataset_user=os.getenv("DATASET_USER"), notebook_type="transformers")
 
     session.add(new_row)
 

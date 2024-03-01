@@ -8,15 +8,15 @@ RUN mkdir /home/noperm/notebooks && \
     chown noperm:nopermission /home/noperm/notebooks && \
     chmod 700 /home/noperm/notebooks
 
-COPY ./template-pytorch.ipynb /home/noperm/notebooks/ModelCreation.ipynb
+COPY ./template-transformers.ipynb /home/noperm/notebooks/ModelCreation.ipynb
 RUN chmod 777 /home/noperm/notebooks/ModelCreation.ipynb
 
 COPY requirements.txt /home/noperm/
 COPY save_to_postgres.py /home/noperm/
-COPY upload_pytorch_to_mlflow.py /home/noperm/
+COPY upload_transformers_to_mlflow.py /home/noperm/
 
 RUN chmod 111 /home/noperm/save_to_postgres.py
-RUN chmod 111 /home/noperm/upload_pytorch_to_mlflow.py
+RUN chmod 111 /home/noperm/upload_transformers_to_mlflow.py
 
 RUN apt-get update && \
     apt-get install -y gcc && \
@@ -28,7 +28,7 @@ RUN chmod 500 /boot /etc /media /mnt /opt /proc /run /sbin /srv /var
 RUN pip install notebook
 RUN pip install -r /home/noperm/requirements.txt
 RUN pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-RUN pip install -q datasets transformers evaluate timm albumentations
+RUN pip install -q datasets transformers evaluate timm albumentations accelerate
 
 WORKDIR /home/noperm/notebooks
 
