@@ -8,18 +8,13 @@ RUN mkdir /home/noperm/notebooks && \
     chown noperm:nopermission /home/noperm/notebooks && \
     chmod 700 /home/noperm/notebooks
 
-COPY ./template.ipynb /home/noperm/notebooks/ModelCreation.ipynb
-RUN chmod 777 /home/noperm/notebooks/ModelCreation.ipynb
+COPY ./new_template.ipynb /home/noperm/notebooks/Classification.ipynb
+RUN chmod 777 /home/noperm/notebooks/Classification.ipynb
 
 COPY requirements.txt /home/noperm/
-COPY save_to_postgres.py /home/noperm/
-COPY upload_to_mlflow.py /home/noperm/
-
-RUN chmod 111 /home/noperm/save_to_postgres.py
-RUN chmod 111 /home/noperm/upload_to_mlflow.py
 
 RUN apt-get update && \
-    apt-get install -y gcc && \
+    apt-get install -y gcc libomp-dev cmake g++ && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
