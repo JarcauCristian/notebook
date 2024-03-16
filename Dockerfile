@@ -8,8 +8,10 @@ RUN mkdir /home/noperm/notebooks && \
     chown noperm:nopermission /home/noperm/notebooks && \
     chmod 700 /home/noperm/notebooks
 
-COPY ./new_template.ipynb /home/noperm/notebooks/Classification.ipynb
-RUN chmod 777 /home/noperm/notebooks/Classification.ipynb
+COPY ./classification.ipynb /home/noperm/notebooks/classification.ipynb
+COPY ./regression.ipynb /home/noperm/notebooks/regression.ipynb
+RUN chmod 777 /home/noperm/notebooks/classification.ipynb
+RUN chmod 777 /home/noperm/notebooks/regression.ipynb
 
 COPY requirements.txt /home/noperm/
 
@@ -36,4 +38,4 @@ COPY ./jupyter_notebook_config.py /home/noperm/csp_config.py
 
 EXPOSE 8888
 
-CMD jupyter notebook --NotebookApp.base_url=/${NOTEBOOK_ID} --NotebookApp.token='' --NotebookApp.password='' --ip=0.0.0.0 --port=8888 --no-browser --config=/home/noperm/csp_config.py /home/noperm/notebooks/ModelCreation.ipynb
+CMD jupyter notebook --NotebookApp.base_url=/${NOTEBOOK_ID} --NotebookApp.token='' --NotebookApp.password='' --ip=0.0.0.0 --port=8888 --no-browser --config=/home/noperm/csp_config.py
