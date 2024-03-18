@@ -788,7 +788,7 @@ c.ServerApp.disable_check_xsrf = True
 
 ## Open the named file when the application is launched.
 #  Default: ''
-c.ServerApp.file_to_run = '/home/noprem/notebooks/ModelCreation.ipynb'
+# c.ServerApp.file_to_run = '/home/noperm/notebooks/classificatioon.ipynb'
 
 ## The URL prefix where files are opened directly.
 #  Default: 'notebooks'
@@ -950,7 +950,7 @@ c.ServerApp.file_to_run = '/home/noprem/notebooks/ModelCreation.ipynb'
 ## If True, display controls to shut down the Jupyter server, such as menu items
 #  or buttons.
 #  Default: True
-# c.ServerApp.quit_button = True
+c.ServerApp.quit_button = False
 
 ## DEPRECATED. Use ZMQChannelsWebsocketConnection.rate_limit_window
 #  Default: 0.0
