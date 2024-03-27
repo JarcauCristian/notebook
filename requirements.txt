@@ -13,3 +13,4 @@ lightgbm==4.3.0
 matplotlib
 seaborn==0.13.2
 shap==0.45.0
+ipython

@@ -6,15 +6,15 @@ RUN addgroup nopermission && useradd noperm -m -s /bin/bash && adduser noperm no
 
 RUN mkdir /home/noperm/notebooks && \
     chown noperm:nopermission /home/noperm/notebooks && \
-    chmod 744 /home/noperm/notebooks 
+    chmod 764 /home/noperm/notebooks 
 
 COPY classification.ipynb /home/noperm/notebooks/classification.ipynb
 COPY regression.ipynb /home/noperm/notebooks/regression.ipynb
 COPY clustering.ipynb /home/noperm/notebooks/clustering.ipynb
 COPY metrics.py /home/noperm/notebooks/metrics.py
-RUN chmod 774 /home/noperm/notebooks/classification.ipynb
-RUN chmod 774 /home/noperm/notebooks/regression.ipynb
-RUN chmod 774 /home/noperm/notebooks/clustering.ipynb
+RUN chmod 776 /home/noperm/notebooks/classification.ipynb
+RUN chmod 776 /home/noperm/notebooks/regression.ipynb
+RUN chmod 776 /home/noperm/notebooks/clustering.ipynb
 RUN chmod 555 /home/noperm/notebooks/metrics.py
 COPY ./jupyter_notebook_config.py /home/noperm/csp_config.py
 
