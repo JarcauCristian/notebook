@@ -21,7 +21,7 @@ COPY ./jupyter_notebook_config.py /home/noperm/csp_config.py
 COPY requirements.txt /home/noperm/
 
 RUN apt-get update && \
-    apt-get install -y gcc libomp-dev cmake g++ && \
+    apt-get install -y gcc libomp-dev cmake g++ git && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
